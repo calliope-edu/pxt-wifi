@@ -5,7 +5,7 @@ enum MessageType {
 /**
  * Functions to operate Grove module.
  */
-//% weight=10 color=#9F79EE icon="\uf1b3" block="WiFI"
+//% weight=10 color=#9F79EE icon="\uf1b3" block="WiFi"
 //% groups='["UartWiFi"]'
 namespace WiFi {
     /**
