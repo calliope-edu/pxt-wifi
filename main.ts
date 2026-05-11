@@ -255,7 +255,9 @@ namespace WiFi {
         serial.redirect(WIFI_TX, WIFI_RX, wifiBaudRate)
     }
 
-    export function adafruitIOGetValue(feed: string, username: string, aioKey: string): string {
+    //% block="Adafruit IO GET|Username %username|AIO Key %aioKey|Feed %feed"
+    //% group="UartWiFi"
+    export function adafruitIOGetValue(username: string, aioKey: string, feed: string): string {
         clearSerialBuffer()
 
         if (isWifiConnected) {
@@ -336,9 +338,9 @@ namespace WiFi {
     /**
         * Send value to an Adafruit IO feed (HTTP POST)
         */
-    //% block="Adafruit IO POST|Username %username|Feed %feed|Value %value|AIO Key %aioKey"
+    //% block="Adafruit IO POST|Username %username|AIO Key %aioKey|Feed %feed|Value %value"
     //% group="UartWiFi"
-    export function adafruitIOPost(username: string, feed: string, value: string, aioKey: string) {
+    export function adafruitIOPost(username: string, aioKey: string, feed: string, value: string) {
         serial.readString() // dump old data 
         basic.pause(20)
 
