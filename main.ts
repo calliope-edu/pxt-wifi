@@ -14,6 +14,20 @@ namespace WiFi {
 
     let isWifiConnected = false;
     let wifiBaudRate = BaudRate.BaudRate115200;
+
+    // Every block below drives the one shared UART to the ESP32. loops.everyInterval runs
+    // its body in a separate fiber, so without this two blocks interleave their AT commands
+    // mid-exchange and each reads the other's replies.
+    let busy = false
+
+    function acquire() {
+        while (busy) basic.pause(10)
+        busy = true
+    }
+
+    function release() {
+        busy = false
+    }
     /**
      * Setup Grove - Uart WiFi V2 to connect to  Wi-Fi
      */
@@ -24,6 +38,7 @@ namespace WiFi {
     //% group="Connection"
     //% weight=90
     export function setupWifi(txPin: SerialPin, rxPin: SerialPin, baudRate: BaudRate, ssid: string, passwd: string) {
+        acquire()
         let result = 0
 
         isWifiConnected = false
@@ -70,6 +85,7 @@ namespace WiFi {
         if (result == 1) {
             isWifiConnected = true
         }
+        release()
     }
 
     /**
@@ -91,6 +107,7 @@ namespace WiFi {
     //% apiKey.defl="your Write API Key"
     //% weight=70
     export function sendToThingSpeak(apiKey: string, field1: number = 0, field2: number = 0, field3: number = 0, field4: number = 0, field5: number = 0, field6: number = 0, field7: number = 0, field8: number = 0) {
+        acquire()
         let result = 0
         let retry = 2
 
@@ -118,12 +135,13 @@ namespace WiFi {
             if (!isNaN(field8)) data = data + "&field8=" + field8
 
             sendAtCmd("AT+CIPSEND=" + (data.length + 2))
-            result = waitAtResponse(">", "OK", "ERROR", 2000)
-            if (result == 3) continue
+            result = waitSendPrompt(2000)
+            if (result != 1) continue
             sendAtCmd(data)
-            result = waitAtResponse("SEND OK", "SEND FAIL", "ERROR", 5000)
+            result = waitSendResult(5000)
             if (result == 1) break
         }
+        release()
     }
 
     /**
@@ -138,6 +156,7 @@ namespace WiFi {
     //% value3.defl="mini"
     //% weight=65
     export function sendToIFTTT(event: string, key: string, value1: string, value2: string, value3: string) {
+        acquire()
         let result = 0
         let retry = 2
 
@@ -168,15 +187,16 @@ namespace WiFi {
             data = data + "\u000D\u000A"
 
             sendAtCmd("AT+CIPSEND=" + (data.length + 2))
-            result = waitAtResponse(">", "OK", "ERROR", 2000)
-            if (result == 3) continue
+            result = waitSendPrompt(2000)
+            if (result != 1) continue
             sendAtCmd(data)
-            result = waitAtResponse("SEND OK", "SEND FAIL", "ERROR", 5000)
+            result = waitSendResult(5000)
             // close the TCP connection
             // sendAtCmd("AT+CIPCLOSE")
             // waitAtResponse("OK", "ERROR", "None", 2000)
             if (result == 1) break
         }
+        release()
     }
 
     let ThingsboardAdresse = "paminasogo.ddns.net"
@@ -190,6 +210,7 @@ namespace WiFi {
     //% group="Thingsboard"
     //% weight=40
     export function sendToThingsboard(AccessToken: string, Daten1: number = 0.0, Daten2: number = 0.0, Daten3: number = 0.0, Daten4: number = 0.0, Daten5: number = 0.0, Daten6: number = 0.0, Daten7: number = 0.0, Daten8: number = 0.0) {
+        acquire()
         let result = 0
         let retry = 2
 
@@ -208,7 +229,7 @@ namespace WiFi {
         // close the previous TCP connection
         if (isWifiConnected) {
             sendAtCmd("AT+CIPCLOSE")
-            waitAtResponse("OK", "ERROR", "None", 200) //vorher 2000
+            waitAtResponse("OK", "ERROR", "None", 2000)
         }
 
         const payload = JSON.stringify(data);
@@ -221,26 +242,28 @@ namespace WiFi {
         while (isWifiConnected && retry > 0) {
             retry = retry - 1;
 
-            sendAtCmd(`AT+CIPSTART="TCP","${ThingsboardAdresse}",${ThingsboardPort}\r\n`);
-            result = waitAtResponse("OK", "ALREADY CONNECTED", "ERROR", 200) //vorher 2000
+            sendAtCmd(`AT+CIPSTART="TCP","${ThingsboardAdresse}",${ThingsboardPort}`);
+            result = waitAtResponse("OK", "ALREADY CONNECTED", "ERROR", 3000)
             if (result == 3) continue
 
-            sendAtCmd(`AT+CIPSEND=${request.length}\r\n`);
-            result = waitAtResponse(">", "OK", "ERROR", 200) //vorher 2000
-            if (result == 3) continue
+            // sendAtCmd appends CRLF, so the announced length must include those 2 bytes.
+            sendAtCmd(`AT+CIPSEND=${request.length + 2}`);
+            result = waitSendPrompt(2000)
+            if (result != 1) continue
 
             sendAtCmd(request);
-            result = waitAtResponse("SEND OK", "SEND FAIL", "ERROR", 200) //vorher 5000
+            result = waitSendResult(5000)
             if (result == 1) break
 
             // close the previous TCP connection
             if (isWifiConnected) {
                 sendAtCmd("AT+CIPCLOSE")
-                waitAtResponse("OK", "ERROR", "None", 200) //vorher 2000
+                waitAtResponse("OK", "ERROR", "None", 2000)
             }
 
 
         }
+        release()
     }
     /**
     * Set thingsboard adress and port
@@ -264,6 +287,7 @@ namespace WiFi {
     //% weight=70
     //% advanced=true
     export function sendMessage(type: MessageType, address: string, port: number, message: string): void {
+        acquire()
         let result = 0
         let retry = 2
 
@@ -286,12 +310,12 @@ namespace WiFi {
 
             // Send data length
             sendAtCmd("AT+CIPSEND=" + message.length)
-            result = waitAtResponse(">", "OK", "ERROR", 2000)
-            if (result == 3) continue
+            result = waitSendPrompt(2000)
+            if (result != 1) continue
 
             // Send actual message
             serial.writeString(message)
-            result = waitAtResponse("SEND OK", "SEND FAIL", "ERROR", 5000)
+            result = waitSendResult(5000)
 
             // Close connection
             sendAtCmd("AT+CIPCLOSE")
@@ -299,6 +323,7 @@ namespace WiFi {
 
             if (result == 1) break
         }
+        release()
     }
 
     function waitAtResponse(target1: string, target2: string, target3: string, timeout: number) {
@@ -311,6 +336,45 @@ namespace WiFi {
             if (buffer.includes(target1)) return 1
             if (buffer.includes(target2)) return 2
             if (buffer.includes(target3)) return 3
+
+            basic.pause(100)
+        }
+
+        return 0
+    }
+
+    // Wait for the module to be ready to accept a payload after AT+CIPSEND. It may answer
+    // with the ">" prompt or only with "OK" - this firmware does not reliably emit ">", so
+    // accepting "OK" as well is required, otherwise the payload is never written at all.
+    function waitSendPrompt(timeout: number) {
+        let buffer = ""
+        let start = input.runningTime()
+
+        while ((input.runningTime() - start) < timeout) {
+            buffer += serial.readString()
+
+            if (buffer.includes("ERROR") || buffer.includes("SEND FAIL")) return 2
+            if (buffer.includes(">") || buffer.includes("OK")) return 1
+
+            basic.pause(100)
+        }
+
+        return 0
+    }
+
+    // After a payload is written the module does not reliably answer "SEND OK": it may
+    // report "Recv <n> bytes" and then stream the server's reply as "+IPD,<n>:...".
+    // Either of those means the data reached the server, so both count as success and the
+    // caller must not retry - a retry posts the value a second time.
+    function waitSendResult(timeout: number) {
+        let buffer = ""
+        let start = input.runningTime()
+
+        while ((input.runningTime() - start) < timeout) {
+            buffer += serial.readString()
+
+            if (buffer.includes("SEND OK") || buffer.includes("+IPD") || buffer.includes("Recv")) return 1
+            if (buffer.includes("SEND FAIL") || buffer.includes("ERROR")) return 2
 
             basic.pause(100)
         }
@@ -340,6 +404,7 @@ namespace WiFi {
     //% group="Adafruit IO"
     //% weight=75
     export function adafruitIOGetValue(username: string, aioKey: string, feed: string): string {
+        acquire()
         clearSerialBuffer()
 
         if (isWifiConnected) {
@@ -349,19 +414,21 @@ namespace WiFi {
 
         sendAtCmd("AT+CIPSTART=\"TCP\",\"io.adafruit.com\",80")
         let result = waitAtResponse("OK", "ALREADY CONNECTED", "ERROR", 3000)
-        if (result == 3) return ""
+        if (result == 3) { release(); return "" }
 
+        // Built without the trailing blank line: sendAtCmd appends the CRLF that
+        // terminates the headers, exactly as in adafruitIOPost, which the module accepts.
         let req =
             "GET /api/v2/" + username + "/feeds/" + feed + "/data/last HTTP/1.1\r\n" +
             "Host: io.adafruit.com\r\n" +
             "X-AIO-Key: " + aioKey + "\r\n" +
-            "Connection: close\r\n\r\n"
+            "Connection: close\r\n"
 
-        sendAtCmd("AT+CIPSEND=" + req.length)
-        result = waitAtResponse(">", "OK", "ERROR", 2000)
-        if (result == 3) return ""
+        sendAtCmd("AT+CIPSEND=" + (req.length + 2))
+        result = waitSendPrompt(2000)
+        if (result != 1) { release(); return "" }
 
-        serial.writeString(req + "\r\n")
+        sendAtCmd(req)
 
         // Read and parse incrementally - find value ASAP
         let buffer = ""
@@ -403,6 +470,7 @@ namespace WiFi {
                 }
                 // If we found value and no new data for 500ms, return it
                 if (found.length > 0 && (input.runningTime() - lastDataTime) > 500) {
+                    release()
                     return found
                 }
                 // If no new data for 2 seconds, we're done
@@ -412,9 +480,9 @@ namespace WiFi {
             }
         }
 
+        release()
         if (found.length > 0) return found
 
-        // dbg("No value in " + buffer.length + " bytes")
         return ""
     }
     /**
@@ -424,7 +492,8 @@ namespace WiFi {
     //% group="Adafruit IO"
     //% weight=80
     export function adafruitIOPost(username: string, aioKey: string, feed: string, value: any) {
-        serial.readString() // dump old data 
+        acquire()
+        serial.readString() // dump old data
         basic.pause(20)
 
         let result = 0
@@ -437,6 +506,10 @@ namespace WiFi {
 
         while (isWifiConnected && retry > 0) {
             retry = retry - 1
+
+            // Drop anything left from a previous attempt (typically the tail of a "+IPD"
+            // response), otherwise it is read as the answer to the command below.
+            serial.readString()
 
             // Open TCP connection
             sendAtCmd("AT+CIPSTART=\"TCP\",\"io.adafruit.com\",80")
@@ -456,14 +529,16 @@ namespace WiFi {
             data += "Accept: */*\r\n\r\n"
             data += body
 
-            sendAtCmd("AT+CIPSEND=" + data.length)
-            result = waitAtResponse(">", "OK", "ERROR", 2000)
-            if (result == 3) continue
+            // sendAtCmd appends CRLF, so the announced length must include those 2 bytes.
+            sendAtCmd("AT+CIPSEND=" + (data.length + 2))
+            result = waitSendPrompt(2000)
+            if (result != 1) continue
 
             sendAtCmd(data)
-            result = waitAtResponse("SEND OK", "SEND FAIL", "ERROR", 5000)
+            result = waitSendResult(5000)
             if (result == 1) break
         }
+        release()
     }
     function clearSerialBuffer() {
         let t = input.runningTime()
