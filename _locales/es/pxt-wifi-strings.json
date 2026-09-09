@@ -8,5 +8,11 @@
     "WiFi.setThingsboardServer|block": "Cambiar servidor Thingsboard %Serveradresse|dirección %Port|puerto",
     "WiFi.sendMessage|block": "Enviar mensaje|Tipo %type|Servidor %address|Puerto %port|Mensaje %message",
     "WiFi.adafruitIOGetValue|block": "Adafruit IO GET|Usuario %username|Clave AIO %aioKey|Feed %feed",
-    "WiFi.adafruitIOPost|block": "Adafruit IO POST|Usuario %username|Clave AIO %aioKey|Feed %feed|Valor %value"
+    "WiFi.adafruitIOPost|block": "Adafruit IO POST|Usuario %username|Clave AIO %aioKey|Feed %feed|Valor %value",
+    "{id:category}WiFi": "WiFi",
+    "{id:group}Connection": "Conexión",
+    "{id:group}Adafruit IO": "Adafruit IO",
+    "{id:group}ThingsSpeak": "ThingSpeak",
+    "{id:group}IFTTT": "IFTTT",
+    "{id:group}Thingsboard": "Thingsboard"
 }

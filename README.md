@@ -1,6 +1,6 @@
-# pxt-wifi-adafruitio
+# pxt-wifi
 
-A MakeCode extension for the **Calliope mini** that drives the **Grove UART WiFi V2** (ESP32 AT-firmware based) module. Supports sending data to **ThingSpeak**, **IFTTT**, and **Adafruit IO**, as well as sending raw TCP/UDP messages.
+A MakeCode extension for the **Calliope mini** that drives the **Calliope WiFi Module** (ESP32 AT-firmware based). Supports sending data to **ThingSpeak**, **IFTTT**, and **Adafruit IO**, as well as sending raw TCP/UDP messages.
 
 ## Hardware
 
