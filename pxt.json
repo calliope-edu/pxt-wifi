@@ -9,20 +9,13 @@
     "files": [
         "main.ts",
         "README.md",
-        "_locales/de/main-strings.json",
-        "_locales/de/main-jsdoc-strings.json",
-        "_locales/it/main-strings.json",
-        "_locales/it/main-jsdoc-strings.json",
-        "_locales/es/main-strings.json",
-        "_locales/es/main-jsdoc-strings.json",
-        "_locales/fr/main-strings.json",
-        "_locales/fr/main-jsdoc-strings.json"
-    ],
-    "testFiles": [],
-    "targetVersions": {
-        "target": ">=1.0.0"
-    },
-    "supportedTargets": [
-        "calliope"
+        "_locales/de/pxt-wifi-strings.json",
+        "_locales/de/pxt-wifi-jsdoc-strings.json",
+        "_locales/it/pxt-wifi-strings.json",
+        "_locales/it/pxt-wifi-jsdoc-strings.json",
+        "_locales/es/pxt-wifi-strings.json",
+        "_locales/es/pxt-wifi-jsdoc-strings.json",
+        "_locales/fr/pxt-wifi-strings.json",
+        "_locales/fr/pxt-wifi-jsdoc-strings.json"
     ]
 }

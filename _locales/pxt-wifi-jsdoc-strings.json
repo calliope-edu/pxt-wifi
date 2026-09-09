@@ -1,0 +1,11 @@
+{
+  "WiFi": "Functions to operate Grove module.",
+  "WiFi.adafruitIOPost": "Send value to an Adafruit IO feed (HTTP POST)",
+  "WiFi.sendMessage": "Send a raw message via TCP or UDP",
+  "WiFi.sendToIFTTT": "Send data to IFTTT",
+  "WiFi.sendToThingSpeak": "Send data to ThingSpeak",
+  "WiFi.sendToThingsboard": "Send data to Thingsboard",
+  "WiFi.setThingsboardServer": "Set thingsboard adress and port",
+  "WiFi.setupWifi": "Setup Grove - Uart WiFi V2 to connect to  Wi-Fi",
+  "WiFi.wifiOK": "Check if Grove - Uart WiFi V2 is connected to Wifi"
+}

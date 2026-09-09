@@ -1,0 +1,18 @@
+{
+  "WiFi.adafruitIOGetValue|block": "Adafruit IO GET|Username %username|AIO Key %aioKey|Feed %feed",
+  "WiFi.adafruitIOPost|block": "Adafruit IO POST|Username %username|AIO Key %aioKey|Feed %feed|Value %value",
+  "WiFi.sendMessage|block": "Send Message|Type %type|Server %address|Port %port|Message %message",
+  "WiFi.sendToIFTTT|block": "Send Data to your IFTTT Event|Event %event|Key %key|value1 %value1||value2 %value2|value3 %value3",
+  "WiFi.sendToThingSpeak|block": "Send Data to your ThingSpeak Channel|Write API Key %apiKey|Field1 %field1|Field2 %field2||Field3 %field3|Field4 %field4|Field5 %field5|Field6 %field6|Field7 %field7|Field8 %field8",
+  "WiFi.sendToThingsboard|block": "Send Data to your Thingsboard Server|Token %AccessToken|Daten_1 %Daten1||Daten_2 %Daten2|Daten_3 %Daten3|Daten_4 %Daten4|Daten_5 %Daten5|Daten_6 %Daten6|Daten_7 %Daten7|Daten_8 %Daten8",
+  "WiFi.setThingsboardServer|block": "Change thingsboard Server %Serveradresse|adress %Port|port",
+  "WiFi.setupWifi|block": "Setup Wifi|TX %txPin|RX %rxPin|Baud rate %baudrate|SSID = %ssid|Password = %passwd",
+  "WiFi.wifiOK|block": "Wifi OK?",
+  "WiFi|block": "WiFi",
+  "{id:category}WiFi": "WiFi",
+  "{id:group}Adafruit IO": "Adafruit IO",
+  "{id:group}Connection": "Connection",
+  "{id:group}IFTTT": "IFTTT",
+  "{id:group}ThingsSpeak": "ThingsSpeak",
+  "{id:group}Thingsboard": "Thingsboard"
+}
