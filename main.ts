@@ -423,7 +423,7 @@ namespace WiFi {
     //% block="Adafruit IO POST|Username %username|AIO Key %aioKey|Feed %feed|Value %value"
     //% group="Adafruit IO"
     //% weight=80
-    export function adafruitIOPost(username: string, aioKey: string, feed: string, value: string) {
+    export function adafruitIOPost(username: string, aioKey: string, feed: string, value: any) {
         serial.readString() // dump old data 
         basic.pause(20)
 
