@@ -7,6 +7,10 @@
     "WiFi.sendToThingsboard": "Envía datos a un servidor Thingsboard.",
     "WiFi.setThingsboardServer": "Establece la dirección y el puerto del servidor Thingsboard.",
     "WiFi.sendMessage": "Envía un mensaje en bruto mediante TCP o UDP.",
-    "WiFi.adafruitIOGetValue": "Obtiene el último valor de un feed de Adafruit IO.",
-    "WiFi.adafruitIOPost": "Envía un valor mediante HTTP POST a un feed de Adafruit IO."
+    "WiFi.adafruitIOGetValue": "Obtiene el último valor de un feed de Adafruit IO: un número si el valor es numérico, si no el texto. 0 si no se pudo leer ningún valor.",
+    "WiFi.adafruitIOPost": "Envía un valor mediante HTTP POST a un feed de Adafruit IO.",
+    "WiFi.setupThingSpeak": "Establece la Write API Key del canal de ThingSpeak.",
+    "WiFi.setupIFTTT": "Establece la clave de Webhooks de IFTTT.",
+    "WiFi.setupAdafruitIO": "Establece el usuario y la clave AIO de Adafruit IO y los comprueba. Ejecuta antes «Configurar WiFi».",
+    "WiFi.adafruitIOOK": "Devuelve true si «Configurar Adafruit IO» pudo iniciar sesión con el usuario y la clave AIO."
 }

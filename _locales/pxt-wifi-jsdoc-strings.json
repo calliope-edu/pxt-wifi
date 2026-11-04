@@ -7,5 +7,10 @@
   "WiFi.sendToThingsboard": "Send data to Thingsboard",
   "WiFi.setThingsboardServer": "Set thingsboard adress and port",
   "WiFi.setupWifi": "Setup Grove - Uart WiFi V2 to connect to  Wi-Fi",
-  "WiFi.wifiOK": "Check if Grove - Uart WiFi V2 is connected to Wifi"
+  "WiFi.wifiOK": "Check if Grove - Uart WiFi V2 is connected to Wifi",
+  "WiFi.setupThingSpeak": "Set the ThingSpeak channel's Write API Key used by \"Send Data to ThingSpeak\"",
+  "WiFi.setupIFTTT": "Set the IFTTT Webhooks key used by \"Send Data to IFTTT\"",
+  "WiFi.setupAdafruitIO": "Set the Adafruit IO username and AIO Key used by the Adafruit IO blocks and check them with Adafruit IO. Run \"Setup Wifi\" first. Check the result with \"Adafruit IO OK?\".",
+  "WiFi.adafruitIOGetValue": "Get the latest value of an Adafruit IO feed. Returns a number if the value is a number, otherwise the text. Returns 0 if no value could be read.",
+  "WiFi.adafruitIOOK": "True if \"Setup Adafruit IO\" could log in to Adafruit IO with the given username and AIO Key."
 }

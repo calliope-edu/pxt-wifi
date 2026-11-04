@@ -7,7 +7,7 @@
         "core": "*"
     },
     "files": [
-        "main.ts",
+        "wifi.ts",
         "README.md",
         "_locales/de/pxt-wifi-strings.json",
         "_locales/de/pxt-wifi-jsdoc-strings.json",
@@ -17,5 +17,12 @@
         "_locales/es/pxt-wifi-jsdoc-strings.json",
         "_locales/fr/pxt-wifi-strings.json",
         "_locales/fr/pxt-wifi-jsdoc-strings.json"
-    ]
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "testDependencies": {
+        "v3": "*",
+        "extra-serial": "github:fabianhugo/pxt-extra-serial#v1.4.1"
+    }
 }

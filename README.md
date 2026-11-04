@@ -21,12 +21,11 @@ Default wiring:
 Connect to a WiFi network. Call this once at startup.
 
 ```blocks
-WiFi.setupWifi(
-    SerialPin.C17, SerialPin.C16,
-    BaudRate.BaudRate115200,
-    "MySSID", "MyPassword"
-)
+WiFi.setupWifi("MySSID", "MyPassword")
 ```
+
+TX/RX pins default to C17/C16; expand the block to change them. While connecting the
+LEDs show an animation, followed by a checkmark (connected) or an X (failed).
 
 ### Check connection
 
@@ -39,26 +38,43 @@ if (WiFi.wifiOK()) {
 ### Send to ThingSpeak
 
 ```blocks
-WiFi.sendToThinkSpeak("YOUR_WRITE_API_KEY", 23.5)
+WiFi.setupThingSpeak("YOUR_WRITE_API_KEY")
+WiFi.sendToThingSpeak(23.5)
 ```
 
 ### Send to IFTTT
 
 ```blocks
-WiFi.sendToIFTTT("my_event", "YOUR_KEY", "Hello", "Calliope", "mini")
+WiFi.setupIFTTT("YOUR_KEY")
+WiFi.sendToIFTTT("my_event", "Hello", "Calliope", "mini")
+```
+
+### Adafruit IO – setup
+
+Run after "Setup Wifi": the block checks the username and AIO Key with Adafruit IO.
+
+```blocks
+WiFi.setupAdafruitIO("username", "YOUR_AIO_KEY")
+if (WiFi.adafruitIOOK()) {
+    basic.showIcon(IconNames.Yes)
+}
 ```
 
 ### Adafruit IO – POST a value
 
+The value can be a number or a text.
+
 ```blocks
-WiFi.adafruitIOPost("username", "feed-name", "42", "YOUR_AIO_KEY")
+WiFi.adafruitIOPost(42, "feed-name")
 ```
 
 ### Adafruit IO – GET the latest value
 
+Returns a number if the feed's value is a number, otherwise the text (0 if nothing could be read).
+
 ```typescript
-let val = WiFi.adafruitIOGetValue("feed-name", "username", "YOUR_AIO_KEY")
-basic.showString(val)
+let val = WiFi.adafruitIOGetValue("feed-name")
+basic.showNumber(val)
 ```
 
 ### Send a raw TCP / UDP message
