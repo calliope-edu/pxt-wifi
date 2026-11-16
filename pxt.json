@@ -1,7 +1,7 @@
 {
     "name": "pxt-wifi",
-    "version": "0.4.1",
-    "description": "Grove UART WiFi V2 (ESP32-based) driver for Calliope mini. Supports ThingSpeak, IFTTT, and Adafruit IO, Thingsboard.",
+    "version": "0.4.2",
+    "description": "Wifi Modul Treiber für den Calliope mini. Unterstützt ThingSpeak, IFTTT, und Adafruit IO, Thingsboard.",
     "license": "MIT",
     "dependencies": {
         "core": "*"
