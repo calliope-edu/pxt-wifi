@@ -5,7 +5,7 @@ A MakeCode extension for the **Calliope mini** that drives the **Calliope WiFi M
 ## Hardware
 
 - [Calliope mini](https://calliope.cc/)
-- [Grove - UART WiFi V2 )](https://wiki.seeedstudio.com/Grove-UART_Wifi_V2/)
+- [Grove - UART WiFi V2](https://wiki.seeedstudio.com/Grove-UART_Wifi_V2/)
 
 Default wiring:
 
